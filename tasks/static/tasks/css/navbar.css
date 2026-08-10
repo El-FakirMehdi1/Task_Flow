@@ -1,0 +1,276 @@
+/* ============================================================
+   FIELD LOG — shared tokens + navbar
+   Tokens live here (on :root) since navbar.css loads first in
+   base.html, so home.css / form.css / footer.css can reuse them.
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --paper: #EAE6DA;
+  --paper-dim: #E1DCCB;
+  --paper-deep: #DED8C8;
+  --ink: #262019;
+  --ink-soft: #6B6152;
+  --rule: #C9C2AE;
+  --navy: #2B3A4A;
+  --forest: #2F6F4E;
+  --amber: #A6741B;
+  --brick: #A63A2E;
+
+  --font-display: 'Special Elite', cursive;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  background: var(--paper-deep);
+  font-family: var(--font-body);
+  margin: 0;
+}
+
+.container {
+  width: min(95%, 1600px);
+  margin: 0 auto;
+  padding-inline: 1rem;
+  box-sizing: border-box;
+}
+
+header {
+  background: var(--paper);
+  border-bottom: 2px solid var(--ink);
+  background-image: radial-gradient(circle at 1px 1px, rgba(38,32,25,0.05) 1px, transparent 0);
+  background-size: 18px 18px;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 0.9rem 0;
+}
+
+/* ---------- logo ---------- */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--ink);
+}
+
+.logo i {
+  font-size: 1.05rem;
+  color: var(--navy);
+  border: 1.5px solid var(--navy);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo h2{
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.25rem;
+  letter-spacing: 0.01em;
+  margin: 0;
+}
+
+/* ---------- nav links ---------- */
+.nav-links {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 1.9rem;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links a {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--ink-soft);
+  position: relative;
+  padding-bottom: 0.35rem;
+  transition: color 0.15s ease;
+}
+
+.nav-links a:hover { color: var(--ink); }
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--brick);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.18s ease;
+}
+
+.nav-links a:hover::after { transform: scaleX(1); }
+
+.nav-links a.active {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.nav-links a.active::after { transform: scaleX(1); }
+
+/* ---------- right side ---------- */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+.user-menu {
+  position: relative;
+}
+
+.user-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1.5px solid var(--rule);
+  background: var(--paper-dim);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 0.5rem 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.user-trigger:hover,
+.user-trigger:focus-visible {
+  border-color: var(--ink);
+  background: #fff;
+}
+
+.user-dropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  min-width: 170px;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  box-shadow: 0 18px 40px rgba(38, 32, 25, 0.12);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease;
+  z-index: 10;
+}
+
+.user-menu:hover .user-dropdown,
+.user-menu:focus-within .user-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.user-dropdown a {
+  display: block;
+  padding: 0.75rem 1rem;
+  color: var(--ink);
+  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.user-dropdown a:hover {
+  background: rgba(47, 111, 78, 0.08);
+  color: var(--forest);
+}
+
+.user-dropdown a.disabled {
+  color: var(--ink-soft);
+  pointer-events: none;
+}
+
+.notification {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--rule);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-soft);
+  text-decoration: none;
+  position: relative;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.notification:hover {
+  color: var(--ink);
+  border-color: var(--ink-soft);
+}
+
+/* dot — remove if you don't have unread state to show */
+.notification::after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  right: 7px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--brick);
+  border: 1.5px solid var(--paper);
+}
+
+/* stamp-style CTA, echoes the priority badges on the dashboard */
+.btn-add {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--forest);
+  border: 1.5px solid var(--forest);
+  border-radius: 4px;
+  padding: 0.5rem 0.9rem;
+  transform: rotate(-1.5deg);
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+
+.btn-add:hover {
+  background: var(--forest);
+  color: var(--paper);
+  transform: rotate(0deg);
+}
+
+.btn-add i { font-size: 0.72rem; }
+
+.nav-links a:focus-visible,
+.notification:focus-visible,
+.btn-add:focus-visible {
+  outline: 2px solid var(--navy);
+  outline-offset: 2px;
+}
+
+/* ---------- mobile ---------- */
+@media (max-width: 760px) {
+  .navbar { flex-wrap: wrap; row-gap: 0.75rem; }
+  .nav-links { order: 3; width: 100%; justify-content: space-between; gap: 0.5rem; }
+  .nav-links a { font-size: 0.68rem; }
+}

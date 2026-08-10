@@ -1,0 +1,31 @@
+<header>
+    <div class="container">
+        <nav class="navbar">
+            <div class="logo">
+                <i class="fa-solid fa-check-double"></i>
+                <h2>TaskFlow
+                </h2>
+            </div>
+            <ul class="nav-links">
+                <li><a href="{% url 'home' %}" class="active">Home</a></li>
+                <li><a href="#">Categories</a></li>
+                <li><a href="#">Dashboard</a></li>
+                <li><a href="#">About</a></li>
+            </ul>
+            <div class="nav-right">
+                <div class="user-menu">
+                    <button type="button" class="user-trigger">
+                        <span>{{ request.user.username }}</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="user-dropdown">
+                        <a href="#">Settings</a>
+                        <a href="{% url 'logout' %}">Logout</a>
+                    </div>
+                </div>
+                <a href="#" class="notification"><i class="fa-regular fa-bell"></i></a>
+                <a href="{% url 'add_task' %}" class="btn-add"><i class="fa-solid fa-plus"></i> Add Task</a>
+            </div>
+        </nav>
+    </div>
+</header>

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="form-container">
+    <div class="form-header">
+        <h1>Login</h1>
+        <p>Welcome back — sign in to continue managing your tasks.</p>
+    </div>
+
+    <form method="POST" class="styled-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn-save">
+            Login
+        </button>
+    </form>
+
+    <p class="auth-link">
+        Don't have an account?
+        <a href="{% url 'register' %}">
+            Register
+        </a>
+    </p>
+</div>
+
+{% endblock %}

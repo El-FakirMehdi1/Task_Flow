@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="form-container">
+    <div class="form-header">
+        <h1>Edit Task</h1>
+        <p>Update your task information.</p>
+    </div>
+
+    <form method="POST" class="styled-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <div class="buttons">
+            <a href="{% url 'home' %}" class="btn-cancel">
+                Cancel
+            </a>
+            <button type="submit" class="btn-save">
+                Save Changes
+            </button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

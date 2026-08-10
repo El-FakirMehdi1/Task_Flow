@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="form-container">
+    <div class="form-header">
+        <h1>Create Account</h1>
+        <p>Join TaskFlow and start organizing your tasks.</p>
+    </div>
+
+    <form method="POST" class="styled-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn-save">
+            Register
+        </button>
+    </form>
+
+    <p class="auth-link">
+        Already have an account?
+        <a href="{% url 'login' %}">
+            Login
+        </a>
+    </p>
+</div>
+
+{% endblock %}

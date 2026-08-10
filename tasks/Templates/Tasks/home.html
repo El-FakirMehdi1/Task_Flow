@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+
+<div class="logbook">
+
+    <section class="home-header">
+        <div>
+            <span class="eyebrow">Field Log — Personal Task Register</span>
+            <h1>My Tasks</h1>
+            <p>Organize your work and boost your productivity.</p>
+        </div>
+        <div class="log-stamp">
+            <strong>{% now "d M Y" %}</strong>
+            {{ total_completed }} / {{ total_tasks }} logged done
+        </div>
+    </section>
+
+    <section class="statistics">
+
+        <div class="card purple-card">
+            <div class="icon"><i class="fa-solid fa-list-check"></i></div>
+            <div class="info">
+                <h2>{{ total_tasks }}</h2>
+                <span>All Tasks</span>
+            </div>
+        </div>
+
+        <div class="card green-card">
+            <div class="icon"><i class="fa-solid fa-circle-check"></i></div>
+            <div class="info">
+                <h2>{{ total_completed }}</h2>
+                <span>Completed</span>
+            </div>
+        </div>
+
+        <div class="card orange-card">
+            <div class="icon"><i class="fa-solid fa-hourglass-half"></i></div>
+            <div class="info">
+                <h2>{{ total_pending }}</h2>
+                <span>Pending</span>
+            </div>
+        </div>
+
+        <div class="card red-card">
+            <div class="icon"><i class="fa-solid fa-flag"></i></div>
+            <div class="info">
+                <h2>{{ total_high_priority }}</h2>
+                <span>High Priority</span>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="tasks-section">
+
+        <div class="tasks-header">
+
+            <h2>Recent Tasks</h2>
+
+            <div class="tools">
+
+                <form method="GET" class="search-form">
+
+                    <div class="search-box">
+
+                        <i class="fa-solid fa-magnifying-glass"></i>
+
+                        <input type="text" name="search" placeholder="Search task..." value="{{ request.GET.search }}">
+
+                    </div>
+
+
+
+                    <select name="category" onchange="this.form.submit()">
+
+                        <option value="">All Categories</option>
+
+                        {% for category in categories %}
+
+                        <option value="{{ category.id }}"
+                            {% if request.GET.category == category.id|stringformat:"s" %}selected{% endif %}>
+                            {{ category.name }}
+                        </option>
+
+                        {% endfor %}
+
+                    </select>
+                    <select name="priority" onchange="this.form.submit()">
+                        <option value="">All Priority</option>
+                        <option value="L" {% if request.GET.priority == 'L' %}selected{% endif %}>Low</option>
+                        <option value="M" {% if request.GET.priority == 'M' %}selected{% endif %}>Medium</option>
+                        <option value="H" {% if request.GET.priority == 'H' %}selected{% endif %}>High</option>
+                    </select>
+                </form>
+
+            </div>
+
+        </div>
+
+
+        {% if Tasks %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Due Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in Tasks %}
+                <tr>
+                    <td>{{ task.title }}</td>
+                    <td>{{ task.category }}</td>
+                    <td>
+                        {% if task.priority == 'H' %}
+                        <span class="priority high">High</span>
+                        {% elif task.priority == 'M' %}
+                        <span class="priority medium">Medium</span>
+                        {% else %}
+                        <span class="priority low">Low</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if task.Completed %}
+                        <span class="status completed">Completed</span>
+                        {% else %}
+                        <span class="status pending">Pending</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ task.due_date|date:"d M Y" }}</td>
+                    <td>
+                        <div class="actions">
+                            <a href="{% url 'edit_task' task.id %}"><i class="fa-solid fa-pen-to-square"></i></a>
+                            <a href="#" data-id="{{ task.id }}" data-title="{{ task.title }}"
+                                onclick="openDeleteModal(this); return false;">
+                                <i class="fa-solid fa-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-log">
+            <i class="fa-solid fa-feather-pointed"></i>
+            No entries yet. Add your first task to start the log.
+        </div>
+        {% endif %}
+
+    </section>
+    <div id="deleteModal" class="modal">
+
+        <div class="modal-content">
+
+            <h2>Delete Task</h2>
+
+            <p id="deleteText"></p>
+
+            <form id="deleteForm" method="POST">
+
+                {% csrf_token %}
+
+                <button type="button" class="cancel-btn" onclick="closeDeleteModal()">
+                    Cancel
+                </button>
+
+                <button type="submit" class="delete-btn">
+                    Delete
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
