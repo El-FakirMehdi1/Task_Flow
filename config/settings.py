@@ -76,9 +76,9 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "taskflow_db",
-        "USER": "taskflow_user",
-        "PASSWORD": "mehdi.123",
+        "NAME": "task_flow",
+        "USER": "postgres",
+        "PASSWORD": "mehdi",
         "HOST": "localhost",
         "PORT": "5432",
     }
@@ -121,7 +121,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
+    BASE_DIR / "tasks" / "static",
 ]
 LOGIN_URL = "login"
 

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="logbook page-shell">
+    <section class="home-header">
+        <div>
+            <span class="eyebrow">TaskFlow — Catalog</span>
+            <h1>Categories</h1>
+            <p>Organize work by theme, focus, or workflow.</p>
+        </div>
+        <div class="log-stamp">
+            <strong>{{ categories|length }}</strong>
+            active categories
+        </div>
+    </section>
+
+    <section class="stats-grid">
+        {% for category in categories %}
+        <article class="info-card category-card">
+            <div class="card-topline">
+                <span class="mini-tag" style="background: {{ category.color|default:'#2B3A4A' }}; color: white;">{{ category.name|slice:':1'|upper }}</span>
+                <span class="card-pill">{{ category.task_count }} tasks</span>
+            </div>
+            <h2>{{ category.name }}</h2>
+            <p>{{ category.completed_count }} completed · {{ category.task_count|add:'-category.completed_count' }} pending</p>
+            <div class="mini-progress">
+                {% if category.task_count %}
+                <span style="width: {% widthratio category.completed_count category.task_count 100 %}%"></span>
+                {% else %}
+                <span style="width: 0%"></span>
+                {% endif %}
+            </div>
+        </article>
+        {% empty %}
+        <div class="empty-log">
+            <i class="fa-solid fa-folder-open"></i>
+            No categories yet. Start by creating your first task group.
+        </div>
+        {% endfor %}
+    </section>
+</div>
+{% endblock %}

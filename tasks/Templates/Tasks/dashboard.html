@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="logbook page-shell">
+    <section class="home-header">
+        <div>
+            <span class="eyebrow">Performance Board</span>
+            <h1>Dashboard</h1>
+            <p>Track your workflow, output, and priorities.</p>
+        </div>
+        <div class="log-stamp">
+            <strong>{% now "d M Y" %}</strong>
+            progress overview
+        </div>
+    </section>
+
+    <section class="statistics">
+        <div class="card purple-card">
+            <div class="icon"><i class="fa-solid fa-list-check"></i></div>
+            <div class="info">
+                <h2>{{ total_tasks }}</h2>
+                <span>Total Tasks</span>
+            </div>
+        </div>
+
+        <div class="card green-card">
+            <div class="icon"><i class="fa-solid fa-circle-check"></i></div>
+            <div class="info">
+                <h2>{{ total_completed }}</h2>
+                <span>Completed</span>
+            </div>
+        </div>
+
+        <div class="card orange-card">
+            <div class="icon"><i class="fa-solid fa-hourglass-half"></i></div>
+            <div class="info">
+                <h2>{{ total_pending }}</h2>
+                <span>Pending</span>
+            </div>
+        </div>
+
+        <div class="card red-card">
+            <div class="icon"><i class="fa-solid fa-flag"></i></div>
+            <div class="info">
+                <h2>{{ total_high_priority }}</h2>
+                <span>High Priority</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="dashboard-grid">
+        <article class="panel panel-wide">
+            <div class="panel-header">
+                <h2>Category Breakdown</h2>
+            </div>
+            <div class="bars">
+                {% for category in category_breakdown %}
+                <div class="bar-row">
+                    <div class="bar-label">
+                        <span>{{ category.name }}</span>
+                        <strong>{{ category.task_count }}</strong>
+                    </div>
+                    <div class="bar-track">
+                        {% if total_tasks %}
+                        <span class="bar-fill" style="width: {% widthratio category.task_count total_tasks 100 %}%"></span>
+                        {% else %}
+                        <span class="bar-fill" style="width: 0%"></span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% empty %}
+                <p class="muted-copy">No task categories available yet.</p>
+                {% endfor %}
+            </div>
+        </article>
+
+        <article class="panel">
+            <div class="panel-header">
+                <h2>Recent Activity</h2>
+            </div>
+            <ul class="activity-list">
+                {% for task in recent_tasks %}
+                <li>
+                    <div>
+                        <strong>{{ task.title }}</strong>
+                        <span>{{ task.category.name }}</span>
+                    </div>
+                    <span class="status {% if task.Completed %}completed{% else %}pending{% endif %}">
+                        {% if task.Completed %}Done{% else %}Open{% endif %}
+                    </span>
+                </li>
+                {% empty %}
+                <li class="muted-copy">No recent updates.</li>
+                {% endfor %}
+            </ul>
+        </article>
+    </section>
+</div>
+{% endblock %}

@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.shortcuts import get_object_or_404
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.forms import AuthenticationForm,UserCreationForm
@@ -56,6 +56,44 @@ def home(request):
         "categories":categories,
         "priority" : priority,
     })
+
+@login_required
+def categories_page(request):
+    categories = Category.objects.filter(task__user=request.user).annotate(
+        task_count=Count('task', distinct=True),
+        completed_count=Count('task', filter=Q(task__Completed=True), distinct=True),
+    ).order_by('name')
+
+    return render(request, "Tasks/categories.html", {"categories": categories})
+
+@login_required
+def dashboard_page(request):
+    user_tasks = Task.objects.filter(user=request.user).select_related('category')
+
+    total_tasks = user_tasks.count()
+    total_completed = user_tasks.filter(Completed=True).count()
+    total_pending = user_tasks.filter(Completed=False).count()
+    total_high_priority = user_tasks.filter(priority='H').count()
+
+    category_breakdown = Category.objects.filter(task__user=request.user).annotate(
+        task_count=Count('task')
+    ).order_by('-task_count', 'name')
+
+    recent_tasks = user_tasks.order_by('-updated_at')[:5]
+
+    return render(request, "Tasks/dashboard.html", {
+        "total_tasks": total_tasks,
+        "total_completed": total_completed,
+        "total_pending": total_pending,
+        "total_high_priority": total_high_priority,
+        "category_breakdown": category_breakdown,
+        "recent_tasks": recent_tasks,
+    })
+
+@login_required
+def about_page(request):
+    return render(request, "Tasks/about.html")
+
 @login_required
 def add_task(request):
    if request.method == 'POST':
